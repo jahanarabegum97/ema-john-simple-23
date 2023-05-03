@@ -14,12 +14,48 @@ const Shop = () => {
         .then(data => setProducts(data))
     }, [])
 
-    useEffect(()=>{
-        const storedCart = getShoppingCart();
-        console.log(storedCart);
-    },[])
+//  // localStorage
+//    useEffect(()=>{
+//     console.log('products',products)
+//     const storedCart = getShoppingCart();
+//     // console.log(storedCart);
+//     // step 2: get id
+//     for(const id in storedCart){
+//         // console.log(id);
+//         // step-2: get the product by using id
+//         const addedProduct = products.find(product =>product.id ===id);
+//         // console.log(addedProduct);
+//         // step-3: get quantity of the product
+//         const quantity = storedCart[id];
+//         addedProduct.quantity = quantity;
+//         console.log(addedProduct);
+//     }
+//    },[products])
 
 
+useEffect(()=>{
+    const storedCart = getShoppingCart()
+    const savedCart = []
+    // step-1: get id of the added product/ stored product
+    for(const id in storedCart){
+        // step-2: get product from products state by using id
+        const addedProduct = products.find(product =>(product.id === id));
+        // console.log('addedProduct',addedProduct);
+        if(addedProduct){
+            // step-3: add quantity
+            const quantity = storedCart[id]
+            addedProduct.quantity = quantity;
+            // step: 4 add the added Product to the saved cart.
+            savedCart.push(addedProduct);
+        }
+    }
+    // step-5 Set the cart
+    setCart(savedCart)
+
+},[products])
+
+
+// age ei toko chilo
       // event handlers
       const handleAddToCart = (product)=>{
         // console.log('product added', product)
@@ -28,6 +64,7 @@ const Shop = () => {
        setCart(newCart);
        addToDb(product.id)
     }
+
 
     return (
         <div className='shop-container'>
